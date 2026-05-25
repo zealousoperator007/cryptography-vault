@@ -1,38 +1,64 @@
 function encryptData() {
-    const text = document.getElementById('inputText').value;
-    const pass = document.getElementById('passphrase').value;
-    const algo = document.getElementById('algorithm').value;
-    let output = "";
+    // 1. Get Elements
+    const textInput = document.getElementById('inputText');
+    const passInput = document.getElementById('passphrase');
+    const algoSelect = document.getElementById('algorithm');
+    const outputBox = document.getElementById('outputText');
 
+    const text = textInput.value;
+    const pass = passInput.value;
+    const algo = algoSelect.value;
+
+    // 2. Validation
     if (!text || !pass) {
-        alert("Please enter text and a passphrase! Don't be lazy.);
+        // Fixed the missing quote here! 
+        alert("Please enter text and a passphrase! Don't be lazy."); 
         return;
     }
 
+    let output = "";
+
     try {
         if (algo === "AES") {
-            // AES Encryption
+            // AES-256 Encryption
             output = CryptoJS.AES.encrypt(text, pass).toString();
         } else if (algo === "DES") {
-            // DES Encryption (Note: DES is insecure! Use TripleDES if possible)
+            // DES Encryption (Weak, but functional for demo)
             output = CryptoJS.DES.encrypt(text, pass).toString();
         } else if (algo === "RSA") {
-            // RSA is asymmetric. It needs public/private keys. 
-            // For a simple demo, we'll alert the user that this requires key pairs.
-            alert("RSA requires Public/Private key pairs. Implementing full RSA in vanilla JS without libraries like JSEncrypt is complex. Stick to AES for symmetric speed!");
+            // RSA requires key pairs. We cannot do simple symmetric RSA with just a passphrase.
+            // For this demo, we will block it or suggest AES.
+            alert("⚠️ RSA Error: RSA is asymmetric encryption. It requires a Public Key to encrypt and a Private Key to decrypt. You cannot use a simple passphrase for RSA encryption in this manner. Please switch to AES-256 for symmetric security.");
             return;
         }
-        document.getElementById('outputText').value = output;
+
+        // 3. Output Result
+        outputBox.value = output;
+        console.log("✅ Encryption Successful!");
+        
     } catch (e) {
-        console.error(e);
-        alert("Encryption failed. Check your inputs.");
+        console.error("Encryption Error:", e);
+        alert("Encryption failed. See console for details.");
     }
 }
 
 function decryptData() {
-    const text = document.getElementById('inputText').value; // Usually you paste the encrypted text here
-    const pass = document.getElementById('passphrase').value;
-    const algo = document.getElementById('algorithm').value;
+    // 1. Get Elements
+    const textInput = document.getElementById('inputText'); // User pastes encrypted text here
+    const passInput = document.getElementById('passphrase');
+    const algoSelect = document.getElementById('algorithm');
+    const outputBox = document.getElementById('outputText');
+
+    const text = textInput.value;
+    const pass = passInput.value;
+    const algo = algoSelect.value;
+
+    // 2. Validation
+    if (!text || !pass) {
+        alert("Please enter the encrypted ciphertext and the passphrase!");
+        return;
+    }
+
     let output = "";
 
     try {
@@ -42,13 +68,24 @@ function decryptData() {
         } else if (algo === "DES") {
             const bytes = CryptoJS.DES.decrypt(text, pass);
             output = bytes.toString(CryptoJS.enc.Utf8);
+        } else if (algo === "RSA") {
+             alert("️ RSA Decryption requires a Private Key. This demo does not support raw RSA decryption with a passphrase.");
+             return;
+        }
+
+        // 3. Check if decryption resulted in empty string (wrong password)
+        if (!output) {
+            output = "❌ Decryption Failed: Wrong passphrase or corrupted data.";
+            outputBox.style.color = "red";
+        } else {
+            outputBox.style.color = "green"; // Success color
         }
         
-        if (!output) {
-            output = "Decryption failed. Wrong passphrase or corrupted data.";
-        }
-        document.getElementById('outputText').value = output;
+        outputBox.value = output;
+
     } catch (e) {
-        document.getElementById('outputText').value = "Error: Invalid ciphertext or passphrase.";
+        console.error("Decryption Error:", e);
+        outputBox.value = "❌ Error: Invalid ciphertext format or wrong algorithm selected.";
+        outputBox.style.color = "red";
     }
 }
