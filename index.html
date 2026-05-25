@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cryptography Vault</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Import CryptoJS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Cryptography Vault</h1>
+        <p class="subtitle">Encrypt your secrets. <em>Geheimnis</em></p>
+        
+        <textarea id="inputText" placeholder="Enter your sensitive data here..."></textarea>
+        
+        <select id="algorithm">
+            <option value="AES">AES-256</option>
+            <option value="DES">DES</option>
+            <option value="RSA">RSA</option>
+        </select>
+
+        <input type="password" id="passphrase" placeholder="Enter Passphrase (Key)">
+        
+        <div class="buttons">
+            <button onclick="encryptData()">🔒 Encrypt</button>
+            <button onclick="decryptData()">🔓 Decrypt</button>
+        </div>
+
+        <textarea id="outputText" readonly placeholder="Result will appear here..."></textarea>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
