@@ -2,33 +2,67 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Cryptography Vault</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cryptography Vault | Shadow Knight</title>
+    <!-- Link to external CSS -->
     <link rel="stylesheet" href="style.css">
-    <!-- Import CryptoJS -->
+    <!-- Import CryptoJS from CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <!-- Google Fonts for that Cyberpunk feel -->
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <h1>Cryptography Vault</h1>
-        <p class="subtitle">Encrypt your secrets.</p>
-        
-        <textarea id="inputText" placeholder="Enter your sensitive data here..."></textarea>
-        
-        <select id="algorithm">
-            <option value="AES">AES-256</option>
-            <option value="DES">DES</option>
-            <option value="RSA">RSA</option>
-        </select>
 
-        <input type="password" id="passphrase" placeholder="Enter Passphrase (Key)">
-        
-        <div class="buttons">
-            <button onclick="encryptData()">🔒 Encrypt</button>
-            <button onclick="decryptData()">🔓 Decrypt</button>
+<div class="container">
+    <header>
+        <h1>Cryptography Vault</h1>
+        <p class="subtitle">Encrypt your secrets. Decrypt your truth.</p>
+    </header>
+
+    <!-- Input Section -->
+    <div class="input-group">
+        <label for="inputText">Plaintext / Ciphertext</label>
+        <textarea id="inputText" placeholder="Enter data to encrypt OR paste ciphertext to decrypt..." aria-label="Data Input"></textarea>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+        <div class="select-group">
+            <label for="algorithm">Algorithm</label>
+            <select id="algorithm" aria-label="Select Encryption Algorithm">
+                <option value="AES">AES-256 (Recommended)</option>
+                <option value="DES">DES (Legacy/Weak)</option>
+                <option value="RC4">RC4 (Stream Cipher)</option>
+                <!-- RSA Disabled because it requires Key Pairs, not just a passphrase -->
+                <option value="RSA" disabled title="Requires Public/Private Key Pair">RSA (Asymmetric - Disabled)</option>
+            </select>
         </div>
 
-        <textarea id="outputText" readonly placeholder="Result will appear here..."></textarea>
+        <div class="pass-group">
+            <label for="passphrase">Passphrase (Key)</label>
+            <input type="password" id="passphrase" placeholder="Enter a strong secret phrase..." aria-label="Encryption Passphrase">
+        </div>
     </div>
-    <script src="script.js"></script>
+
+    <!-- Action Buttons -->
+    <div class="buttons">
+        <button onclick="encryptData()" class="btn-encrypt">🔒 Encrypt</button>
+        <button onclick="decryptData()" class="btn-decrypt">🔓 Decrypt</button>
+    </div>
+
+    <!-- Output Section -->
+    <div class="output-group">
+        <label for="outputText">Result</label>
+        <textarea id="outputText" readonly placeholder="Result will appear here..." aria-label="Output Result"></textarea>
+        <button onclick="copyToClipboard()" class="btn-copy">📋 Copy Result</button>
+    </div>
+
+    <!-- Status Toast Notification -->
+    <div id="toast" class="toast hidden">Notification</div>
+</div>
+
+<!-- Link to external JS -->
+<script src="script.js"></script>
+
 </body>
 </html>
